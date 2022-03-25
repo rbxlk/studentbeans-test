@@ -28,23 +28,14 @@ class Checkout
   end
 
   def apply_discounts(total, item, count)
-    if item == :apple || item == :pear
-      if (count % 2 == 0)
-        total += prices.fetch(item) * (count / 2)
-      else
-        total += prices.fetch(item) * count
-      end
-    elsif item == :banana || item == :pineapple
-      if item == :pineapple
-        total += (prices.fetch(item) / 2)
-        total += (prices.fetch(item)) * (count - 1)
-      else
-        total += (prices.fetch(item) / 2) * count
-      end
+    if @discounts[:buyXgetYfree].key?(item) && count >= @discounts[:buyXgetYfree][item][:qualify]
+      discount_params = @discounts[:buyXgetYfree].fetch(item)
+      free_items = ((count / discount_params[:qualify]).floor()) * discount_params[:free]
+      total += prices.fetch(item) * (count - free_items)
     else
       total += prices.fetch(item) * count
     end
+    
     return total
   end
-
 end
