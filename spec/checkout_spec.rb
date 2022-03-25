@@ -5,7 +5,7 @@ RSpec.describe Checkout do
   describe '#total' do
     subject(:total) { checkout.total }
 
-    let(:checkout) { Checkout.new(pricing_rules) }
+    let(:checkout) { Checkout.new(pricing_rules, discount_rules) }
     let(:pricing_rules) {
       {
         apple: 10,
@@ -14,6 +14,32 @@ RSpec.describe Checkout do
         banana: 30,
         pineapple: 100,
         mango: 200
+      }
+    }
+    let(:discount_rules) {
+      {
+        buyXgetYfree: {
+          apple: {
+            qualify: 2,
+            free: 1
+          },
+          pears: {
+            qualify: 2,
+            free: 1
+          }
+        },
+        buyXgetYreduction: {
+          banana: {
+            qualify: 1,
+            reduction: 0.5,
+            only_once: false
+          },
+          pineapple: {
+            qualify: 1,
+            reduction: 0.5,
+            only_once: true
+          }
+        }
       }
     }
 
